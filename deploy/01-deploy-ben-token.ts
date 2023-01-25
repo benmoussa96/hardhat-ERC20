@@ -3,7 +3,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import verify from "../utils/verify";
 
-const deployLock: DeployFunction = async function ({
+const deployBenToken: DeployFunction = async function ({
   getNamedAccounts,
   deployments,
   network,
@@ -12,17 +12,13 @@ const deployLock: DeployFunction = async function ({
   const { deployer } = await getNamedAccounts();
   const chainId: number = network.config.chainId!;
 
-  let lockName;
+  const initialSupply = networkConfig[chainId]["initialSupply"];
+  const TOKEN_NAME = process.env.TOKEN_NAME;
+  const TOKEN_SYMBOL = process.env.TOKEN_SYMBOL;
 
-  if (developmentChains.includes(network.name)) {
-    lockName = "Lock on Development Network";
-  } else {
-    lockName = networkConfig[chainId]["lockName"];
-  }
+  const lockArgs = [initialSupply, TOKEN_NAME, TOKEN_SYMBOL];
 
-  const lockArgs = [lockName];
-
-  const lock = await deploy("Lock", {
+  const benToken = await deploy("BenToken", {
     from: deployer,
     args: lockArgs,
     log: true,
@@ -33,9 +29,9 @@ const deployLock: DeployFunction = async function ({
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    await verify(lock.address, lockArgs);
+    await verify(benToken.address, lockArgs);
   }
 };
 
-export default deployLock;
-deployLock.tags = ["all", "lock"];
+export default deployBenToken;
+deployBenToken.tags = ["all", "bentoken"];
