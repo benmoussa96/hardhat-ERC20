@@ -7,7 +7,7 @@ import { BenToken } from "../../typechain-types";
 !developmentChains.includes(network.name)
   ? describe.skip
   : describe("BenToken", async () => {
-      let ourToken: BenToken,
+      let benToken: BenToken,
         deployer: SignerWithAddress,
         user1: SignerWithAddress;
       const chainId: number = network.config.chainId!;
@@ -18,31 +18,31 @@ import { BenToken } from "../../typechain-types";
         user1 = accounts[1];
 
         await deployments.fixture("all");
-        ourToken = await ethers.getContract("OurToken", deployer);
+        benToken = await ethers.getContract("BenToken", deployer);
       });
 
       it("Should have correct INITIAL_SUPPLY of token ", async function () {
         const initialSupply = networkConfig[chainId]["initialSupply"];
-        const totalSupply = await ourToken.totalSupply();
-        expect(totalSupply.toString()).to.equal(initialSupply);
+        const totalSupply = await benToken.totalSupply();
+        expect(totalSupply).to.equal(initialSupply);
       });
 
       it("Should be able to transfer tokens successfully to an address", async function () {
-        const tokensToSend = ethers.utils.parseEther("10");
-        await ourToken.transfer(user1.address, tokensToSend);
-        expect(await ourToken.balanceOf(user1.address)).to.equal(tokensToSend);
+        const tokensToSend = 10;
+        await benToken.transfer(user1.address, tokensToSend);
+        expect(await benToken.balanceOf(user1.address)).to.equal(tokensToSend);
       });
 
       it("Should approve other address to spend token", async () => {
-        const tokensToSpend = ethers.utils.parseEther("5");
-        await ourToken.approve(user1.address, tokensToSpend);
-        const ourToken1 = await ethers.getContract("OurToken", user1);
-        await ourToken1.transferFrom(
+        const tokensToSpend = 5;
+        await benToken.approve(user1.address, tokensToSpend);
+        const benToken1 = await ethers.getContract("BenToken", user1);
+        await benToken1.transferFrom(
           deployer.address,
           user1.address,
           tokensToSpend
         );
-        expect(await ourToken1.balanceOf(user1.address)).to.equal(
+        expect(await benToken1.balanceOf(user1.address)).to.equal(
           tokensToSpend
         );
       });
