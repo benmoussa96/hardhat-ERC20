@@ -11,10 +11,10 @@ interface TokenRecipient {
 }
 
 /**
- * @title BenToken
+ * @title BenTokenFromScratch
  * @author Ghaieth BEN MOUSSA
  */
-contract BenToken {
+contract BenTokenFromScratch {
   // Public variables of the token
   string public name;
   string public symbol;

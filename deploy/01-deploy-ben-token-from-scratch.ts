@@ -3,7 +3,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import verify from "../utils/verify";
 
-const deployBenToken: DeployFunction = async function ({
+const deployBenTokenFromScratch: DeployFunction = async function ({
   getNamedAccounts,
   deployments,
   network,
@@ -18,7 +18,7 @@ const deployBenToken: DeployFunction = async function ({
 
   const lockArgs = [initialSupply, TOKEN_NAME, TOKEN_SYMBOL];
 
-  const benToken = await deploy("BenToken", {
+  const benToken = await deploy("BenTokenFromScratch", {
     from: deployer,
     args: lockArgs,
     log: true,
@@ -33,5 +33,5 @@ const deployBenToken: DeployFunction = async function ({
   }
 };
 
-export default deployBenToken;
-deployBenToken.tags = ["all", "bentoken"];
+export default deployBenTokenFromScratch;
+deployBenTokenFromScratch.tags = ["all", "bentokenfromscratch"];
